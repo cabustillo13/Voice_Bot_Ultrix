@@ -16,7 +16,7 @@ body {
 }
 
 .controls {
-    margin-bottom: 20px;
+    margin-bottom: 20px; /* Space between button and canvas */
 }
 
 #record-btn {
@@ -33,7 +33,7 @@ body {
 #transcript {
     font-size: 18px;
     color: #333;
-    margin-top: 20px;
+    margin-top: 20px; /* Space between canvas and transcript */
     width: 100%;
     max-width: 600px;
 }

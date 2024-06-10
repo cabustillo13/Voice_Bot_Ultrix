@@ -1,9 +1,9 @@
-let isRecording = false;
-let recognition;
-let audioContext;
-let mediaRecorder;
-let waveformCanvas;
-let waveformCtx;
+let isRecording = false; // Flag to track recording state
+let recognition; // Speech recognition object
+let audioContext; // Audio context for waveform visualization
+let mediaRecorder; // Media recorder for audio stream
+let waveformCanvas; // Canvas element for waveform
+let waveformCtx; // Canvas 2D context
 
 document.addEventListener('DOMContentLoaded', () => {
     const recordBtn = document.getElementById('record-btn');
@@ -13,9 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     recordBtn.addEventListener('click', toggleRecording);
 
+    // Check if the browser supports the Web Speech API
     if (!('webkitSpeechRecognition' in window)) {
         alert('Your browser does not support speech recognition. Please use Google Chrome.');
     } else {
+        // Initialize the speech recognition object
         recognition = new webkitSpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
@@ -23,14 +25,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
         recognition.onresult = event => {
             let finalTranscript = '';
+            // Aggregate the final results
             for (let i = event.resultIndex; i < event.results.length; ++i) {
                 if (event.results[i].isFinal) {
                     finalTranscript += event.results[i][0].transcript;
                 }
             }
-            transcript.textContent = finalTranscript;
+            transcript.textContent = finalTranscript; // Display the transcript
             if (finalTranscript) {
-                speakText(finalTranscript);
+                speakText(finalTranscript); // Speak out the transcript
             }
         };
 
@@ -40,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
+// Function to toggle recording state
 function toggleRecording() {
     isRecording = !isRecording;
     const recordBtn = document.getElementById('record-btn');
@@ -53,11 +57,13 @@ function toggleRecording() {
     }
 }
 
+// Function to start recording
 function startRecording() {
     if (recognition) {
         recognition.start();
     }
 
+    // Get access to the user's microphone
     if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
         navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -65,13 +71,14 @@ function startRecording() {
             mediaRecorder = new MediaRecorder(stream);
             mediaRecorder.start();
 
-            visualizeAudio(source);
+            visualizeAudio(source); // Start visualizing audio
         }).catch(err => {
             console.error('Error accessing microphone', err);
         });
     }
 }
 
+// Function to stop recording
 function stopRecording() {
     if (recognition) {
         recognition.stop();
@@ -84,6 +91,7 @@ function stopRecording() {
     }
 }
 
+// Function to visualize audio
 function visualizeAudio(source) {
     const analyser = audioContext.createAnalyser();
     source.connect(analyser);
@@ -92,6 +100,7 @@ function visualizeAudio(source) {
     const bufferLength = analyser.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
+    // Recursive function to draw the waveform
     const draw = () => {
         if (!isRecording) return;
 
@@ -126,9 +135,10 @@ function visualizeAudio(source) {
         waveformCtx.stroke();
     };
 
-    draw();
+    draw(); // Start the drawing loop
 }
 
+// Function to speak the transcribed text
 function speakText(text) {
     const utterance = new SpeechSynthesisUtterance(text);
     window.speechSynthesis.speak(utterance);
