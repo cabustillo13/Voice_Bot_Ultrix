@@ -7,6 +7,7 @@ let waveformCtx; // Canvas 2D context
 
 document.addEventListener('DOMContentLoaded', () => {
     const recordBtn = document.getElementById('record-btn');
+    const languageSelect = document.getElementById('language-select');
     const transcript = document.getElementById('transcript');
     waveformCanvas = document.getElementById('waveform');
     waveformCtx = waveformCanvas.getContext('2d');
@@ -21,7 +22,6 @@ document.addEventListener('DOMContentLoaded', () => {
         recognition = new webkitSpeechRecognition();
         recognition.continuous = true;
         recognition.interimResults = true;
-        recognition.lang = 'en-US';
 
         recognition.onresult = event => {
             let finalTranscript = '';
@@ -40,6 +40,14 @@ document.addEventListener('DOMContentLoaded', () => {
         recognition.onerror = event => {
             console.error('Speech recognition error', event);
         };
+
+        // Set the initial language
+        recognition.lang = languageSelect.value;
+
+        // Update the language when the selection changes
+        languageSelect.addEventListener('change', () => {
+            recognition.lang = languageSelect.value;
+        });
     }
 });
 
