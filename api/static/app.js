@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (finalTranscript) {
                 // Display the transcribed text first
                 transcript.textContent = finalTranscript;
+                processedTranscript.textContent = "Let me check...";
                 // Call the server to process the text
                 processAndDisplayText(finalTranscript);
             }
