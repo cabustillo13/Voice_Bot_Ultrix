@@ -9,6 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const recordBtn = document.getElementById('record-btn');
     const languageSelect = document.getElementById('language-select');
     const transcript = document.getElementById('transcript');
+    const processedTranscript = document.getElementById('processed-transcript');
     waveformCanvas = document.getElementById('waveform');
     waveformCtx = waveformCanvas.getContext('2d');
 
@@ -33,7 +34,10 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             transcript.textContent = finalTranscript; // Display the transcript
             if (finalTranscript) {
-                speakText(finalTranscript); // Speak out the transcript
+                // Display the transcribed text first
+                transcript.textContent = finalTranscript;
+                // Call the server to process the text
+                processAndDisplayText(finalTranscript);
             }
         };
 
@@ -146,7 +150,26 @@ function visualizeAudio(source) {
     draw(); // Start the drawing loop
 }
 
-// Function to speak the transcribed text
+// Function to process and display the transcribed text
+async function processAndDisplayText(text) {
+    try {
+        const response = await fetch('/process_text', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ text: text })
+        });
+        const result = await response.json();
+        const processedTranscript = document.getElementById('processed-transcript');
+        processedTranscript.textContent = result.text;
+        speakText(result.text);
+    } catch (error) {
+        console.error('Error processing text:', error);
+    }
+}
+
+// Function to speak the text
 function speakText(text) {
     const utterance = new SpeechSynthesisUtterance(text);
     window.speechSynthesis.speak(utterance);
