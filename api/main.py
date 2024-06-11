@@ -9,13 +9,13 @@ import time
 app = FastAPI()
 
 # Mount the static directory to serve static files
-app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="./api/static"), name="static")
 
 # Serve the index.html file
 @app.get("/", response_class=HTMLResponse)
 async def read_index():
     """Index main page"""
-    with open("static/index.html", encoding="utf-8") as f:
+    with open("./api/static/index.html", encoding="utf-8") as f:
         html_content = f.read()
     return HTMLResponse(content=html_content)
 
