@@ -1,25 +1,9 @@
-import json
 import requests
 import os
 from dotenv import load_dotenv
 
-from api.agent.tools.call_playfetch import call_llm
-
 # Load the environment variables
 load_dotenv()
-
-
-def summary_google_search(google_search_content):
-    """Human Friendly output of Google Search"""
-    # LLM
-    url = "https://api.playfetch.ai/5726537974284288/summaryGoogleSearch"
-    data = {
-        "google_search_content": json.dumps(google_search_content)
-    }
-
-    output = call_llm(url, data)
-
-    return output
 
 
 def google_search(query):
@@ -91,6 +75,6 @@ def google_search(query):
         }
 
         # Make a friendly summary
-        answer = summary_google_search(str(raw_answer))
+        answer = str(raw_answer)
 
     return answer

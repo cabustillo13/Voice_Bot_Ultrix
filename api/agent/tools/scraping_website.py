@@ -1,21 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
 
-from api.agent.tools.call_playfetch import call_llm
-
-
-def summary_web_scraping(website_content):
-    """Human Friendly output of Web Scraping"""
-    # LLM
-    url = "https://api.playfetch.ai/5726537974284288/summaryWebScraping"
-    data = {
-        "website_content": website_content
-    }
-
-    output = call_llm(url, data)
-
-    return output
-
 
 def get_text_from_website(url):
     """Get all text from a website"""
@@ -30,10 +15,7 @@ def get_text_from_website(url):
         # Extract text from the parsed HTML
         text = soup.get_text(separator='\n', strip=True)
 
-        # Make a friendly summary
-        output = summary_web_scraping(str(text))
-
-        return output
+        return text
 
     except requests.exceptions.RequestException as e:
         print(f"Error: {e}")
