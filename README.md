@@ -94,3 +94,11 @@ Description: In this stage, multilingual capabilities were added, allowing users
 Description: The final stage involved integrating the frontend with the backend agent. This screenshot demonstrates the connection between the UI and the /process_text API endpoint, which processes the transcribed text and returns the response. The UI displays the response in blue text, maintaining the voice interaction experience.
 
 ![Screenshot demo](docs/demo_3.PNG)
+
+---
+## 📌 ToDO List
+
+- [ ] Implement Prompt Manager (e.g., PlayFetch or Langsmith).
+- [ ] Conduct tests to evaluate transcription and output accuracy.
+- [ ] Enhance user experience by allowing multiple questions without reloading the page.
+- [ ] Attempt to implement automatic language detection instead of manual selection.
