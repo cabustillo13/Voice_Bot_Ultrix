@@ -3,7 +3,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import HTMLResponse, JSONResponse
 import uvicorn
 
-import time
+from api.agent.main_pipeline import agent_executor
 
 
 app = FastAPI()
@@ -24,14 +24,17 @@ async def read_index():
 async def process_text(request: Request):
     """Ask to agent and return the answer"""
     data = await request.json()
-    input_text = data.get("text", "")
+    user_question = data.get("text", "")
     
     # Process input data
-    processed_text = f"Answer: {input_text}"
+    processed_text = agent_executor.invoke({
+        "input": user_question,
+        "chat_history": [],
+        })
 
-    time.sleep(5)
+    print(processed_text)
 
-    return JSONResponse(content={"text": processed_text})
+    return JSONResponse(content={"text": processed_text["output"]})
 
 
 # It runs in http://127.0.0.1:8000 or http://0.0.0.0:8000
