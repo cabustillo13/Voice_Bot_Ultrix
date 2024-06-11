@@ -12,7 +12,28 @@ docker build -t voice_chat_demo:1.0 .
 
 ### Build the Docker container
 ```
-docker run -p 8000:8000 voice_chat_demo:1.0
+docker run -p 80:80 voice_chat_demo:1.0
 ```
 
 **-p:** publish
+
+## Microsoft Azure Deployment
+
+Using Container Registry + Web App
+
+---
+
+### Tag the Docker image version
+```
+docker tag voice_chat_demo:1.0 voicebotcontainer.azurecr.io/voice_chat_demo:1.0
+```
+
+### Login Azure
+```
+docker login voicebotcontainer.azurecr.io
+```
+
+### Push the image
+```
+docker push voicebotcontainer.azurecr.io/voice_chat_demo:1.0
+```
